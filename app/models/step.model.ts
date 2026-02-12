@@ -1,3 +1,5 @@
+import "server-only";
+
 import { model, models, Schema } from "mongoose";
 
 const stepSchema = new Schema(
@@ -17,6 +19,8 @@ const stepSchema = new Schema(
       type: String,
       required: true,
       enum: [
+        "ping",
+        "no_action",
         "clean_text",
         "summarize",
         "extract_key_points",
@@ -36,7 +40,7 @@ const stepSchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 stepSchema.index({ workflowId: 1, order: 1 });
