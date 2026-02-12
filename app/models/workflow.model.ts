@@ -1,11 +1,17 @@
 import { model, models, Schema } from "mongoose";
 
-const workflowSchema = new Schema(
+export interface WorkflowInterface extends Document {
+  userId: string,
+  title: string,
+  steps: Schema.Types.ObjectId[]
+}
+
+const workflowSchema = new Schema<WorkflowInterface>(
   {
     userId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
       required: true,
+      index: true
     },
 
     title: {
@@ -24,6 +30,6 @@ const workflowSchema = new Schema(
 );
 
 const Workflow =
-  models.Workflow || model("Workflow", workflowSchema);
+  models.Workflow || model<WorkflowInterface>("Workflow", workflowSchema);
 
 export default Workflow;

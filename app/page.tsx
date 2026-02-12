@@ -1,12 +1,11 @@
 'use client'
-import { SignOutButton, useAuth } from '@clerk/nextjs'
 import React from 'react'
+import HomePage from './components/Home';
 
 const Page = () => {
-  const {isSignedIn} = useAuth();
   return (
     <div>
-      {isSignedIn ? <div><SignOutButton/></div> : <div>Go to signin</div>}
+      <HomePage/>
     </div>
   )
 }
