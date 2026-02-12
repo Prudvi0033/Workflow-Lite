@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.37.3",
+    "@google/genai": "^1.41.0",
     "mongoose": "^9.2.1",
     "next": "16.1.6",
     "react": "19.2.3",
