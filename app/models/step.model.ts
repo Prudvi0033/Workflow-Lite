@@ -23,8 +23,6 @@ const stepSchema = new Schema(
         "extract_action_items",
         "sentiment_analysis",
         "tag_category",
-        "translate",
-        "rewrite_tone",
       ],
     },
 

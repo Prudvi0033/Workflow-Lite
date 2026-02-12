@@ -3,7 +3,6 @@ import { model, models, Schema } from "mongoose";
 export interface WorkflowInterface extends Document {
   userId: string,
   title: string,
-  steps: Schema.Types.ObjectId[]
 }
 
 const workflowSchema = new Schema<WorkflowInterface>(
@@ -18,13 +17,6 @@ const workflowSchema = new Schema<WorkflowInterface>(
       type: String,
       required: true,
     },
-
-    steps: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Step",
-      },
-    ],
   },
   { timestamps: true }
 );
