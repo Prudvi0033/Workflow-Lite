@@ -1,4 +1,5 @@
-export interface UserInterface {
-    clerkId: string,
-    
+export interface CreateUserInput {
+  clerkId: string;
+  email: string;
+  name: string;
 }
