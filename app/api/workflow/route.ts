@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
 
     const workflowCount = await Workflow.countDocuments({userId})
 
-    if(workflowCount >= 3){
+    if(workflowCount >= 2){
         return NextResponse.json(
         { msg: "You can only create 3 workflows. Delete one to create a new." },
         { status: 400 }
