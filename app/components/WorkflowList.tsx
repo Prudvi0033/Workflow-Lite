@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import {Trash2, FileText } from "lucide-react";
+import React, { ReactElement, useEffect, useState } from "react";
+import { Trash2, FileText } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type Workflow = {
   _id: string;
@@ -12,6 +13,8 @@ type Workflow = {
 const WorkflowList = () => {
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchWorkflows = async () => {
@@ -30,18 +33,29 @@ const WorkflowList = () => {
     fetchWorkflows();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    id: string,
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (deletingId) return;
+
+    setDeletingId(id);
+
     try {
       await fetch(`/api/workflow/${id}`, { method: "DELETE" });
       setWorkflows((prev) => prev.filter((wf) => wf._id !== id));
     } catch (err) {
       console.error(err);
+    } finally {
+      setDeletingId(null);
     }
   };
 
   return (
     <div className="flex flex-col gap-10">
-      {/* Skeleton */}
       {/* Skeleton */}
       {loading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -56,7 +70,6 @@ const WorkflowList = () => {
               {/* Title Placeholder */}
               <div className="h-4 w-24 bg-slate-200 rounded mb-3" />
 
-              {/* Date Placeholder */}
               <div className="h-3 w-16 bg-slate-200 rounded" />
             </div>
           ))}
@@ -65,39 +78,44 @@ const WorkflowList = () => {
 
       {/* Workflow Grid */}
       {!loading && workflows.length > 0 && (
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-    {workflows.slice(0, 3).map((item) => (
-      <div
-        key={item._id}
-        className="group relative aspect-square bg-slate-100 border border-slate-300 rounded-2xl p-8 flex flex-col items-center justify-center text-center transition-all duration-200 hover:bg-slate-200 hover:shadow-sm"
-      >
-        {/* Icon */}
-        <div className="w-18 h-18 rounded-2xl bg-slate-200 flex items-center justify-center mb-6 transition group-hover:bg-slate-300">
-          <FileText className="w-8 h-8 text-slate-700" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {workflows.slice(0, 3).map((item) => (
+            <div
+              key={item._id}
+              onClick={() => router.push(`/workflow/${item._id}`)}
+              className="group relative aspect-square bg-slate-100 border border-slate-300 rounded-2xl p-8 flex flex-col items-center justify-center text-center transition-all duration-200 hover:bg-slate-200 hover:shadow-sm"
+            >
+              {/* Icon */}
+              <div className="w-18 h-18 rounded-2xl bg-slate-200 flex items-center justify-center mb-6 transition group-hover:bg-slate-300">
+                <FileText className="w-8 h-8 text-slate-700" />
+              </div>
+
+              {/* Title */}
+              <h3 className="text-base font-medium text-slate-900">
+                {item.title}
+              </h3>
+
+              {/* Date */}
+              <p className="text-xs text-slate-600 mt-2">
+                {new Date(item.createdAt).toLocaleDateString()}
+              </p>
+
+              {/* Delete Button */}
+              <button
+                onClick={(e) => handleDelete(e, item._id)}
+                disabled={deletingId === item._id}
+                className="absolute top-5 right-5 opacity-0 group-hover:opacity-100 transition-opacity p-2 text-slate-500 hover:text-slate-800 disabled:opacity-50"
+              >
+                {deletingId === item._id ? (
+                  <div className="w-4 h-4 border-2 border-slate-500 border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Trash2 className="w-4 h-4" />
+                )}
+              </button>
+            </div>
+          ))}
         </div>
-
-        {/* Title */}
-        <h3 className="text-base font-medium text-slate-900">
-          {item.title}
-        </h3>
-
-        {/* Date */}
-        <p className="text-xs text-slate-600 mt-2">
-          {new Date(item.createdAt).toLocaleDateString()}
-        </p>
-
-        {/* Delete Button */}
-        <button
-          onClick={() => handleDelete(item._id)}
-          className="absolute top-5 right-5 opacity-0 group-hover:opacity-100 transition-opacity p-2 text-slate-500 hover:text-slate-800"
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
-      </div>
-    ))}
-  </div>
-)}
-
+      )}
 
       {/* Empty State */}
       {!loading && workflows.length === 0 && (
