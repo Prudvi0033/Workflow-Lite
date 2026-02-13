@@ -2,7 +2,8 @@ import axios from "axios";
 import { Pencil } from "lucide-react";
 import React, { useState } from "react";
 
-type StepType =
+export type StepType =
+  "ping" 
   | "no_action"
   | "clean_text"
   | "summarize"

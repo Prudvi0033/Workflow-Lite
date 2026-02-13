@@ -56,7 +56,12 @@ const WorkflowPage = () => {
 
       router.push(`/workflow/${id}`);
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      // If backend returned a message, use it
+      if (err.response?.data?.msg) {
+        setError(err.response.data.msg);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
       console.log(err);
     } finally {
       setLoading(false);

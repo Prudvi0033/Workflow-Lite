@@ -2,12 +2,42 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import React from "react";
-import Step from "./Step";
+import React, { useEffect, useState } from "react";
+import Step, { StepType } from "./Step";
+import axios from "axios";
+
+interface StepDataInterface {
+  _id: string;
+  workflowId: string;
+  title: string;
+  type: StepType;
+  order: number;
+}
 
 const StepChart = () => {
   const { id } = useParams();
   const router = useRouter();
+
+  const [stepsLoading, setStepsLoading] = useState(false);
+  const [stepData, setStepData] = useState<StepDataInterface[]>([]);
+
+  useEffect(() => {
+    const fetchSteps = async () => {
+      setStepsLoading(true);
+      try {
+        const res = await axios.get(`/api/workflow/${id}/steps`);
+        setStepData(res.data.steps);
+
+        setStepsLoading(false);
+      } catch (error) {
+        console.log("Error in loading steps", error);
+      } finally {
+        setStepsLoading(false);
+      }
+    };
+
+    fetchSteps();
+  }, [id]);
 
   return (
     <div className="min-h-screen w-full bg-linear-to-br from-slate-50 to-slate-100 flex justify-center p-6">
@@ -44,7 +74,17 @@ const StepChart = () => {
 
           {/* Content Container */}
           <div className="relative z-10 h-full flex items-center justify-center p-8">
-            <Step order={1} workflowId={id as string}/>
+            {stepData.map((step) => (
+              <div key={step._id}>
+                <Step
+                  key={step._id}
+                  order={step.order}
+                  workflowId={id as string}
+                  initialTitle={step.title}
+                  initialType={step.type}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>
