@@ -4,6 +4,9 @@ A web application for creating and executing text-processing workflows with sequ
 
 **Live Demo**: [https://workflow-lite.vercel.app/](https://workflow-lite.vercel.app/)
 
+<img width="1262" height="603" alt="image" src="https://github.com/user-attachments/assets/1c48ae3a-ef7a-422e-a122-fadf27dcb2d5" />
+
+
 ## Overview
 
 Workflow Builder Lite allows users to create custom text-processing workflows with multiple steps. Each workflow can contain up to sequential steps that perform predefined text-processing actions like cleaning text, summarizing, extracting key points, and categorizing content.
