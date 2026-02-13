@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Trash2, FileText } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -62,15 +62,15 @@ const WorkflowList = () => {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="aspect-square bg-white border border-slate-200 rounded-2xl p-6 flex flex-col items-center justify-center animate-pulse"
+              className="aspect-square bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-center justify-center animate-pulse"
             >
               {/* Icon Placeholder */}
-              <div className="w-14 h-14 rounded-xl bg-slate-200 mb-6" />
+              <div className="w-14 h-14 rounded-xl bg-gray-200 mb-6" />
 
               {/* Title Placeholder */}
-              <div className="h-4 w-24 bg-slate-200 rounded mb-3" />
+              <div className="h-4 w-24 bg-gray-200 rounded mb-3" />
 
-              <div className="h-3 w-16 bg-slate-200 rounded" />
+              <div className="h-3 w-16 bg-gray-200 rounded" />
             </div>
           ))}
         </div>
@@ -83,20 +83,20 @@ const WorkflowList = () => {
             <div
               key={item._id}
               onClick={() => router.push(`/workflow/${item._id}`)}
-              className="group relative aspect-square bg-slate-100 border border-slate-300 rounded-2xl p-8 flex flex-col items-center justify-center text-center transition-all duration-200 hover:bg-slate-200 hover:shadow-sm"
+              className="group relative aspect-square bg-gray-100 border border-gray-300 rounded-2xl p-8 flex flex-col items-center justify-center text-center transition-all duration-200 hover:bg-gray-200 hover:shadow-sm"
             >
               {/* Icon */}
-              <div className="w-18 h-18 rounded-2xl bg-slate-200 flex items-center justify-center mb-6 transition group-hover:bg-slate-300">
-                <FileText className="w-8 h-8 text-slate-700" />
+              <div className="w-18 h-18 rounded-2xl bg-gray-200 flex items-center justify-center mb-6 transition group-hover:bg-gray-300">
+                <FileText className="w-8 h-8 text-gray-700" />
               </div>
 
               {/* Title */}
-              <h3 className="text-base font-medium text-slate-900">
+              <h3 className="text-base font-medium text-gray-900">
                 {item.title}
               </h3>
 
               {/* Date */}
-              <p className="text-xs text-slate-600 mt-2">
+              <p className="text-xs text-gray-600 mt-2">
                 {new Date(item.createdAt).toLocaleDateString()}
               </p>
 
@@ -104,10 +104,10 @@ const WorkflowList = () => {
               <button
                 onClick={(e) => handleDelete(e, item._id)}
                 disabled={deletingId === item._id}
-                className="absolute top-5 right-5 opacity-0 group-hover:opacity-100 transition-opacity p-2 text-slate-500 hover:text-slate-800 disabled:opacity-50"
+                className="absolute top-5 right-5 opacity-0 group-hover:opacity-100 transition-opacity p-2 text-gray-500 hover:text-gray-800 disabled:opacity-50"
               >
                 {deletingId === item._id ? (
-                  <div className="w-4 h-4 border-2 border-slate-500 border-t-transparent rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-gray-500 border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <Trash2 className="w-4 h-4" />
                 )}
@@ -119,12 +119,12 @@ const WorkflowList = () => {
 
       {/* Empty State */}
       {!loading && workflows.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-24 text-center border border-dashed border-slate-200 rounded-xl bg-slate-50">
-          <FileText className="w-10 h-10 text-slate-400 mb-4" />
-          <h3 className="text-sm font-medium text-slate-800">
+        <div className="flex flex-col items-center justify-center py-24 text-center border border-dashed border-gray-300 rounded-xl bg-gray-100">
+          <FileText className="w-10 h-10 text-gray-400 mb-4" />
+          <h3 className="text-sm font-medium text-gray-800">
             No workflows yet
           </h3>
-          <p className="text-xs text-slate-500 mt-2 max-w-xs">
+          <p className="text-xs text-gray-500 mt-2 max-w-xs">
             Create your first workflow to begin.
           </p>
         </div>

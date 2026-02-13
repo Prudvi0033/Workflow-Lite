@@ -58,15 +58,17 @@ const Step = ({
       {/* Horizontal Node */}
       <div className="flex flex-col items-center relative w-44">
         {/* Top Row: Box + Connector */}
-        <div className="flex items-center w-full">
+        <div className="flex flex-col sm:flex-row items-center w-full">
           {/* Box */}
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center mb-4 sm:mb-0">
             <div className="w-16 h-16 flex items-center justify-center bg-linear-to-bl from-gray-500 to-gray-700 border text-2xl font-bold text-white rounded-xl shadow-md">
               {order}
             </div>
             {/* Content Below */}
             <div className="flex flex-col items-center text-center mt-3">
-              <h2 className="text-sm font-semibold text-gray-800 truncate w-24">{title}</h2>
+              <h2 className="text-sm font-semibold text-gray-800 truncate w-24">
+                {title}
+              </h2>
 
               <p className="text-xs text-gray-500 mt-1">Action: {type}</p>
 
@@ -80,9 +82,9 @@ const Step = ({
             </div>
           </div>
 
-          {/* Connector */}
+          {/* Connector (hidden on mobile) */}
           {order <= 3 && (
-            <div className="flex -space-x-4 text-gray-300 items-center flex-1 mb-18">
+            <div className="hidden sm:flex -space-x-4 text-gray-300 items-center flex-1 mb-18">
               <div className="h-0.5 bg-gray-300 flex-1" />
               <ChevronRight size={32} />
             </div>

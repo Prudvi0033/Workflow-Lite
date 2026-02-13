@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import Step, { StepType } from "./Step";
 import axios from "axios";
 import { toast } from "react-toastify";
+import WorkflowExecutionOutput from "./WorkflowExecutionOutput";
 
 interface StepDataInterface {
   _id: string;
@@ -23,6 +24,10 @@ const StepChart = () => {
   const [stepData, setStepData] = useState<StepDataInterface[]>([]);
   const [inputText, setInputText] = useState("");
   const [executing, setExecuting] = useState(false);
+
+  //to show outputs in stream
+  const [executionResult, setExecutionResult] = useState(null);
+  const [outputLoading, setOutputLoading] = useState(false);
 
   useEffect(() => {
     const fetchSteps = async () => {
@@ -42,7 +47,6 @@ const StepChart = () => {
   }, [id]);
 
   const handleExecute = async () => {
-    // ✅ Validation
     if (!inputText.trim()) {
       toast.error("Please enter input text before executing");
       return;
@@ -50,23 +54,22 @@ const StepChart = () => {
 
     try {
       setExecuting(true);
+      setOutputLoading(true);
+      setExecutionResult(null);
 
-      await axios.post(`/api/workflow/${id}/execute`, {
+      const res = await axios.post(`/api/workflow/${id}/execute`, {
         input: inputText,
       });
 
-      toast.success("Workflow executed successfully");
+      setExecutionResult(res.data.data);
 
-      // optional: clear textarea
       setInputText("");
-
-      // optional: redirect to runs page
-      // router.push(`/workflow/${id}/runs`);
     } catch (error) {
       console.error("Execution error:", error);
       toast.error(error?.response?.data?.message || "Execution failed");
     } finally {
       setExecuting(false);
+      setOutputLoading(false)
     }
   };
 
@@ -92,7 +95,7 @@ const StepChart = () => {
         </div>
 
         {/* Main Canvas Area */}
-        <div className="relative bg-white rounded-2xl h-[82vh] shadow-lg border border-slate-200 overflow-hidden">
+        <div className="relative bg-white rounded-2xl min-h-screen shadow-lg border border-slate-200 overflow-hidden">
           {/* Background */}
           <div
             className="absolute inset-0 opacity-40 pointer-events-none"
@@ -168,7 +171,20 @@ const StepChart = () => {
             </div>
 
             <div className="relative z-10 flex flex-col items-center gap-10">
-              output
+              {outputLoading && (
+                <div className="mt-10 text-slate-600 animate-pulse">
+                  Processing workflow...
+                </div>
+              )}
+
+              {executionResult  && !outputLoading && (
+                <WorkflowExecutionOutput
+                  stepOutputs={executionResult.stepOutputs}
+                  finalOutput={executionResult.finalOutput}
+                  workflowId={id as string}
+                />
+              )}
+
             </div>
           </div>
         </div>

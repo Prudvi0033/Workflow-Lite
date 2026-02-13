@@ -69,22 +69,22 @@ const WorkflowPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center px-4 sm:px-6 py-8 sm:py-2">
+    <div className="min-h-screen bg-gray-50 flex justify-center px-4 sm:px-6 py-8 sm:py-2">
       <div className="w-full h-screen max-w-3xl rounded-2xl  p-6 sm:p-6">
         {/* Header */}
         <div className="mb-8">
           {showSkeleton && (
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 animate-pulse">
               <div className="flex items-center gap-4">
-                <div className="w-11 h-11 rounded-xl bg-slate-200" />
+                <div className="w-11 h-11 rounded-xl bg-gray-200" />
                 <div className="flex flex-col gap-2">
-                  <div className="h-4 w-32 bg-slate-200 rounded" />
-                  <div className="h-3 w-40 bg-slate-200 rounded" />
+                  <div className="h-4 w-32 bg-gray-200 rounded" />
+                  <div className="h-3 w-40 bg-gray-200 rounded" />
                 </div>
               </div>
               <div className="flex gap-3">
-                <div className="h-8 w-28 bg-slate-200 rounded-lg" />
-                <div className="h-8 w-8 bg-slate-200 rounded-lg" />
+                <div className="h-8 w-28 bg-gray-200 rounded-lg" />
+                <div className="h-8 w-8 bg-gray-200 rounded-lg" />
               </div>
             </div>
           )}
@@ -93,14 +93,14 @@ const WorkflowPage = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
               {/* User Info */}
               <div className="flex items-center gap-4">
-                <div className="w-11 h-11 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center font-medium text-base">
+                <div className="w-11 h-11 rounded-xl bg-gray-200 text-gray-700 flex items-center justify-center font-medium text-base">
                   {getInitial()}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium text-slate-900">
+                  <span className="text-sm font-medium text-gray-900">
                     {getUserName()}
                   </span>
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-gray-500">
                     {getUserEmail()}
                   </span>
                 </div>
@@ -110,14 +110,14 @@ const WorkflowPage = () => {
               <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-900 border border-slate-900 text-sm font-medium text-white rounded-xl hover:bg-slate-800 active:scale-95 transition-colors shadow-sm w-full sm:w-auto"
+                  className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-700 border border-gray-900 text-sm font-medium text-white rounded-xl hover:bg-gray-800 active:scale-95 transition-colors shadow-sm w-full sm:w-auto"
                 >
                   <Plus className="w-4 h-4" />
                   Create Workflow
                 </button>
 
                 <SignOutButton redirectUrl="/">
-                  <button className="flex items-center justify-center p-2 text-slate-500 hover:text-slate-800 transition w-full sm:w-auto">
+                  <button className="flex items-center justify-center p-2 text-gray-500 hover:text-gray-800 transition w-full sm:w-auto">
                     <LogOut className="w-5 h-5" />
                   </button>
                 </SignOutButton>
@@ -126,7 +126,7 @@ const WorkflowPage = () => {
           )}
         </div>
 
-        <div className="h-px w-full bg-slate-200 mb-8" />
+        <div className="h-px w-full bg-gray-200 mb-8" />
 
         <WorkflowList />
 
@@ -143,20 +143,20 @@ const WorkflowPage = () => {
               className="relative z-10 w-full max-w-md bg-white rounded-2xl shadow-xl p-6 animate-fadeIn"
             >
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-slate-900">
+                <h2 className="text-lg font-semibold text-gray-900">
                   Create Workflow
                 </h2>
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="text-slate-400 hover:text-slate-600 text-xl"
+                  className="text-gray-400 hover:text-gray-600 text-xl"
                 >
                   <X />
                 </button>
               </div>
 
               <div className="flex flex-col gap-2 mb-6">
-                <label className="text-sm font-medium text-slate-700">
+                <label className="text-sm font-medium text-gray-700">
                   Title <span className="text-red-500">*</span>
                 </label>
 
@@ -171,7 +171,7 @@ const WorkflowPage = () => {
                   className={`w-full px-4 py-2 rounded-xl border text-sm focus:outline-none focus:ring-2 ${
                     error
                       ? "border-red-400 focus:ring-red-200"
-                      : "border-slate-300 focus:ring-slate-200"
+                      : "border-gray-300 focus:ring-gray-200"
                   }`}
                 />
 
@@ -182,7 +182,7 @@ const WorkflowPage = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-fit flex items-end justify-end px-4 py-2 bg-slate-900 text-white text-sm font-medium rounded-xl hover:bg-slate-800 active:scale-95 transition disabled:opacity-70"
+                  className="w-fit flex items-end justify-end px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-800 active:scale-95 transition disabled:opacity-70"
                 >
                   {loading ? (
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
