@@ -27,24 +27,30 @@ export async function POST(
 
     //@ts-expect-error : unknown type issue
     const workflow = await Workflow.findOne({ _id: id, userId });
-
+    
     if (!workflow)
       return NextResponse.json({ msg: "Workflow not found" }, { status: 404 });
-
+    
     if (!title || !type || order === undefined) {
       return NextResponse.json(
         { msg: "Missing required fields" },
         { status: 400 },
       );
     }
-
-    const step = await Step.create({
-      workflowId: workflow._id,
-      title,
-      type,
-      config,
-      order,
-    });
+    
+    const step = await Step.findOneAndUpdate(
+      //@ts-expect-error : unknown type issue
+      { workflowId: workflow._id, order },
+      {
+        title,
+        type,
+        config,
+      },
+      {
+        new: true,
+        upsert: true
+      }
+    );
 
     return NextResponse.json(
       { msg: "Step created successfully", data: step },
@@ -75,7 +81,9 @@ export async function GET(
       return NextResponse.json({ msg: "Workflow not found" }, { status: 404 });
 
     //@ts-expect-error : unknown type issue
-    const steps = await Step.find({ workflowId: workflow._id }).sort({ order: 1 });
+    const steps = await Step.find({ workflowId: workflow._id }).sort({
+      order: 1,
+    });
 
     return NextResponse.json({ workflow, steps }, { status: 200 });
   } catch (error) {
