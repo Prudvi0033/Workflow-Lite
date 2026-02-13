@@ -1,87 +1,218 @@
-# AI Usage Notes
+# Workflow Builder Lite
 
-## AI Tools Used
+A web application for creating and executing text-processing workflows with sequential steps powered by AI.
 
-**Development**: Claude, ChatGPT and GitHub Copilot
-**Application LLM**: Google Gemini 2.5 Flash
+**Live Demo**: [https://workflow-lite.vercel.app/](https://workflow-lite.vercel.app/)
 
-## What I Used AI For
+## Overview
 
-**UI/UX Design**
-- Generated Tailwind CSS layouts and component structures
-- Created neomorphic design patterns
-- I verified: responsive behavior, color schemes, animations
+Workflow Builder Lite allows users to create custom text-processing workflows with multiple steps. Each workflow can contain up to sequential steps that perform predefined text-processing actions like cleaning text, summarizing, extracting key points, and categorizing content.
 
-**Component Architecture**
-- Suggested React component patterns and state management
-- I verified: component hierarchy, hooks usage, edge cases
+### Key Features
 
-**Styling**
-- Generated Tailwind classes and animations
-- I verified: cross-browser compatibility, performance optimization
+- **User Authentication**: Secure login/signup using Clerk
+- **Workflow Management**: Create, edit, and delete workflows
+- **Sequential Steps**: Add up to multiple steps per workflow with different processing actions
+- **Step Types**:
+  - Clean Text
+  - Summarize
+  - Extract Key Points
+  - Tag Category
+  - Sentiment Analysis
+- **Workflow Execution**: Run workflows on input text and see real-time processing
+- **Step-by-Step Output**: View the output of each individual step in the workflow
+- **Run History**: Track the last 5 workflow executions (*LIMIT 5*)
+- **Health Status**: Monitor backend, database, and LLM connection status
+- **Responsive Design**: Clean, modern UI with neomorphic design elements
 
-## What I Verified Myself
+## Getting Started
 
-- Authentication and security (Clerk integration, protected routes, API key handling)
-- Complete data flow testing (frontend to API to database to LLM)
-- All error scenarios (network failures, invalid inputs, API limits)
-- Performance with large inputs and concurrent requests
-- Business logic (5-run limit, 2-workflow rate limit, sequential execution)
-- Cross-browser and responsive design testing
+### Prerequisites
 
-## LLM Provider: Google Gemini 2.5 Flash
+- Node.js (v18 or higher)
+- npm or bun
+- MongoDB database (MongoDB Atlas recommended)
+- Clerk account for authentication
+- Google Gemini API key (for AI-powered step processing)
 
-**Why Gemini?**
-- Fast response times for real-time workflow execution
-- Cost-effective (free tier, best price-to-performance)
-- Good quality for text summarization and extraction
-- Simple SDK integration with Next.js
+### Installation
 
-**Considered Alternatives**
-- GPT-4: Too expensive, slower
-- Claude: More costly for simple text operations
-- Local models: Infrastructure overhead
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Prudvi0033/Workflow-Lite.git
+   cd Workflow-Lite
+   ```
 
-**Implementation Strategy**
-Hybrid approach mixing LLM and non-LLM actions:
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-Non-LLM (fast, free):
-- Clean Text: Regex-based
-- Sentiment Analysis: Keyword matching
+3. **Set up environment variables**
 
-LLM-powered (quality):
-- Summarize
-- Extract Key Points
-- Extract Action Items
-- Tag Category
+   Create `.env.local` file in the root directory:
+   ```env
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=clerk_key
+   CLERK_SECRET_KEY=clerk_secret_key
+   NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+   NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+   MONGOOSE_URI=your_mongodb_connection_string
+   GEMINI_API_KEY=your_anthropic_api_key
+   WEBHOOK_SECRET=clerk_webhook_secret
+   ```
 
-## My Prompts for Gemini
+4. **Run the application**
+   ```bash
+   npm run dev
+   ```
 
-**Summarize:**
+5. **Access the application**
+   
+   Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Architecture
+
+### Tech Stack
+
+**Full-Stack Framework:**
+- Next.js 14 (App Router with API Routes)
+- React
+- TypeScript/JavaScript
+- Tailwind CSS
+
+**Backend (Next.js API Routes):**
+- Next.js API Routes (serverless functions)
+- MongoDB (Mongoose)
+- Google Gemini 2.5 Flash (LLM for text processing)
+- Clerk SDK (Auth verification)
+
+**Frontend:**
+- React components
+- Clerk (Authentication)
+- Axios (API calls)
+- Lucide Icons
+
+### Project Structure
+
 ```
-Summarize the following text clearly and concisely:
-[input]
+workflow-lite/
+├── app/
+│   ├── page.tsx              # Home/Dashboard
+│   ├── [id]/
+│   │   └── page.tsx          # Workflow detail page
+│   ├── runs/
+│   │   └── page.tsx          # Workflow runs history
+│   ├── status/
+│   │   └── page.tsx          # Health status page
+│   └── api/                  # API Routes (Backend)
+│       ├── workflows/
+│       │   └── route.ts      # Workflow CRUD operations
+│       ├── nodes/
+│       │   └── route.ts      # Step/Node operations
+│       ├── execute/
+│       │   └── route.ts      # Workflow execution
+│       └── status/
+│           └── route.ts      # Health checks
+├── components/               # Reusable UI components
+├── lib/
+│   ├── db.ts                # MongoDB connection
+│   └── models/              # Mongoose schemas
+│       ├── User.ts
+│       ├── Workflow.ts
+│       ├── Step.ts
+│       └── WorkflowRun.ts
+├── public/
+└── README.md
 ```
 
-**Extract Key Points:**
-```
-Extract key points from the following text.
-Return them as bullet points:
-[input]
-```
+## Usage Guide
 
-**Extract Action Items:**
-```
-Extract actionable tasks from the following text.
-Return them as a numbered list:
-[input]
-```
+### Creating a Workflow
 
-**Tag Category:**
-```
-Categorize the following text into one short category label.
-Only return the category name:
-[input]
-```
-## Notes
-I did not blindly copy AI code. Every function was tested and understood before use. AI accelerated development, but all critical sections (auth, security, data flow, error handling) were manually verified. The hybrid LLM approach was my design decision for performance and cost optimization.
+1. Click the **"Create Workflow"** button on the dashboard
+2. Enter a workflow title
+3. Click **"Create"** to save
+
+### Adding Steps
+
+1. Open a workflow by clicking on it
+2. Click **"Add Step"** button
+3. Enter step title and select step type:
+   - **Clean Text**: Removes extra whitespace and formatting
+   - **Summarize**: Creates a concise summary
+   - **Extract Key Points**: Identifies main points
+   - **Tag Category**: Categorizes the content
+   - **Sentiment Analysis**: Analyzes emotional tone
+4. Click **"Save"** to add the step
+
+### Running a Workflow
+
+1. Open the workflow
+2. Click **"View Runs"**
+3. Enter your input text in the text area
+4. Click **"Execute Workflow"**
+5. View the output of each step as it processes
+
+### Viewing Run History
+
+- Navigate to the **"View Runs"** page
+- See the last 5 executions with timestamps and results
+- Click on any run to view detailed step outputs
+
+### Checking System Health
+
+- Click **"Status"** in the navigation
+- View real-time status of:
+  - Backend API connection
+  - Database connection
+  - LLM (Claude API) connection
+
+## Features Implemented
+
+- User authentication (Clerk)
+- Create, edit, delete workflows
+- Add/edit/delete workflow steps
+- 5 different step types for text processing
+- Execute workflows on input text
+- View individual step outputs
+- Run history (last 5 runs with limit)
+- Health status monitoring
+- Input validation
+- Error handling
+- Responsive design
+- Loading states
+- Rate limiting protection (2 workflows per user)
+
+## Known Limitations
+
+- Maximum 5 workflow runs stored per workflow (hard limit)
+- Rate limiting: Users can create maximum 2 workflows
+- No export/import functionality
+- No workflow templates
+- No collaborative features
+- Step execution is sequential only (no parallel processing)
+
+## Security Features
+
+- Authentication required for all operations
+- API keys stored securely in environment variables
+- Input validation on both frontend and backend
+- Protected API routes with Clerk middleware
+- No sensitive data in client-side code
+
+## Author
+
+**Prudvi**
+
+For more information, see [ABOUTME.md](./ABOUTME.md)
+
+## Acknowledgments
+
+- Clerk for authentication infrastructure
+- Google for Gemini AI API
+- Vercel for hosting platform
+- MongoDB Atlas for database hosting
+
+---
+
+Note: This application uses AI to process text. Results may vary based on input quality and context. The LLM provider (Google Gemini 2.5 Flash) was chosen for its speed, cost-effectiveness, and strong text processing capabilities.
