@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Usage Notes
 
-## Getting Started
+## AI Tools Used
 
-First, run the development server:
+**Development**: Claude, ChatGPT and GitHub Copilot
+**Application LLM**: Google Gemini 2.5 Flash
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## What I Used AI For
+
+**UI/UX Design**
+- Generated Tailwind CSS layouts and component structures
+- Created neomorphic design patterns
+- I verified: responsive behavior, color schemes, animations
+
+**Component Architecture**
+- Suggested React component patterns and state management
+- I verified: component hierarchy, hooks usage, edge cases
+
+**Styling**
+- Generated Tailwind classes and animations
+- I verified: cross-browser compatibility, performance optimization
+
+## What I Verified Myself
+
+- Authentication and security (Clerk integration, protected routes, API key handling)
+- Complete data flow testing (frontend to API to database to LLM)
+- All error scenarios (network failures, invalid inputs, API limits)
+- Performance with large inputs and concurrent requests
+- Business logic (5-run limit, 2-workflow rate limit, sequential execution)
+- Cross-browser and responsive design testing
+
+## LLM Provider: Google Gemini 2.5 Flash
+
+**Why Gemini?**
+- Fast response times for real-time workflow execution
+- Cost-effective (free tier, best price-to-performance)
+- Good quality for text summarization and extraction
+- Simple SDK integration with Next.js
+
+**Considered Alternatives**
+- GPT-4: Too expensive, slower
+- Claude: More costly for simple text operations
+- Local models: Infrastructure overhead
+
+**Implementation Strategy**
+Hybrid approach mixing LLM and non-LLM actions:
+
+Non-LLM (fast, free):
+- Clean Text: Regex-based
+- Sentiment Analysis: Keyword matching
+
+LLM-powered (quality):
+- Summarize
+- Extract Key Points
+- Extract Action Items
+- Tag Category
+
+## My Prompts for Gemini
+
+**Summarize:**
+```
+Summarize the following text clearly and concisely:
+[input]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Extract Key Points:**
+```
+Extract key points from the following text.
+Return them as bullet points:
+[input]
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Extract Action Items:**
+```
+Extract actionable tasks from the following text.
+Return them as a numbered list:
+[input]
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Tag Category:**
+```
+Categorize the following text into one short category label.
+Only return the category name:
+[input]
+```
+## Notes
+I did not blindly copy AI code. Every function was tested and understood before use. AI accelerated development, but all critical sections (auth, security, data flow, error handling) were manually verified. The hybrid LLM approach was my design decision for performance and cost optimization.
