@@ -2,6 +2,7 @@ import { type Metadata } from 'next'
 import { ClerkProvider } from '@clerk/nextjs'
 import { Geist, Geist_Mono, Jost } from 'next/font/google'
 import './globals.css'
+import { ToastContainer } from 'react-toastify'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -31,6 +32,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={`${jost.className}`}>
           {children}
+          <ToastContainer position="bottom-right"/>
         </body>
       </html>
     </ClerkProvider>

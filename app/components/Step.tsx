@@ -1,9 +1,9 @@
 import axios from "axios";
-import { Pencil } from "lucide-react";
+import { ChevronRight, Pencil } from "lucide-react";
 import React, { useState } from "react";
 
 export type StepType =
-  "ping" 
+  | "ping"
   | "no_action"
   | "clean_text"
   | "summarize"
@@ -17,6 +17,7 @@ interface StepInterface {
   workflowId: string;
   initialTitle?: string;
   initialType?: StepType;
+  isLast?: boolean;
 }
 
 const Step = ({
@@ -24,6 +25,7 @@ const Step = ({
   workflowId,
   initialTitle = `Node ${order}`,
   initialType = "no_action",
+  isLast = false,
 }: StepInterface) => {
   const [title, setTitle] = useState(initialTitle);
   const [type, setType] = useState<StepType>(initialType);
@@ -37,15 +39,12 @@ const Step = ({
 
     setLoading(true);
     try {
-      const res = await axios.post(`/api/workflow/${workflowId}/steps`, {
+      await axios.post(`/api/workflow/${workflowId}/steps`, {
         title,
         type,
         order,
       });
 
-      
-      setTitle(title);
-      setType(type);
       setIsModalOpen(false);
     } catch (err) {
       console.error(err);
@@ -55,20 +54,43 @@ const Step = ({
   };
 
   return (
-    <div>
-      <div className="flex flex-col items-center gap-3">
-        <div className="w-16 h-16 flex items-center justify-center bg-linear-to-bl from-gray-400 to-gray-600 border-2 text-3xl font-bold text-neutral-200 border-neutral-200/80 rounded-xl shadow-[inset_-4px_-4px_8px_rgba(255,255,255,0.4),2px_-2px_12px_rgba(0,0,0,0.2)]">
-          {order}
+    <>
+      {/* Horizontal Node */}
+      <div className="flex flex-col items-center relative w-44">
+        {/* Top Row: Box + Connector */}
+        <div className="flex items-center w-full">
+          {/* Box */}
+          <div className="flex flex-col items-center">
+            <div className="w-16 h-16 flex items-center justify-center bg-linear-to-bl from-gray-500 to-gray-700 border text-2xl font-bold text-white rounded-xl shadow-md">
+              {order}
+            </div>
+            {/* Content Below */}
+            <div className="flex flex-col items-center text-center mt-3">
+              <h2 className="text-sm font-semibold text-gray-800 truncate w-24">{title}</h2>
+
+              <p className="text-xs text-gray-500 mt-1">Action: {type}</p>
+
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="mt-3 flex items-center gap-1 text-xs text-gray-600 hover:text-black transition"
+              >
+                <Pencil size={12} />
+                Edit
+              </button>
+            </div>
+          </div>
+
+          {/* Connector */}
+          {order <= 3 && (
+            <div className="flex -space-x-4 text-gray-300 items-center flex-1 mb-18">
+              <div className="h-0.5 bg-gray-300 flex-1" />
+              <ChevronRight size={32} />
+            </div>
+          )}
         </div>
-        <h1 className="text-[12px] text-neutral-500 font-semibold">{title}</h1>
-        <button
-          className="bg-black/10 hover:bg-white border border-gray-300 text-gray-600 hover:text-gray-700 p-1.5 rounded-md shadow-sm hover:shadow transition-all"
-          onClick={() => setIsModalOpen(true)}
-        >
-          <Pencil size={14} />
-        </button>
       </div>
 
+      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
@@ -78,12 +100,13 @@ const Step = ({
 
           <form
             onSubmit={handleSave}
-            className="relative z-10 w-full max-w-sm bg-white rounded-2xl shadow-xl p-6 animate-fadeIn flex flex-col gap-4"
+            className="relative z-10 w-full max-w-sm bg-white rounded-2xl shadow-xl p-6 flex flex-col gap-4"
           >
             <h2 className="text-lg font-semibold text-slate-900">
               Edit Node {order}
             </h2>
 
+            {/* Title */}
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-slate-700">
                 Title
@@ -96,6 +119,7 @@ const Step = ({
               />
             </div>
 
+            {/* Type */}
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-slate-700">Type</label>
               <select
@@ -129,7 +153,7 @@ const Step = ({
           </form>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
